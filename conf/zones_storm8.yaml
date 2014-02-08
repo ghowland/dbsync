@@ -1,0 +1,93 @@
+# Zones and their Database Sets
+# 
+# A Zone is a like an "area of work", in that a different set of work is done in that
+#   zone, and likely it is access by different people, for different purposes.
+#   Consider the difference between a Developer, Staging and Production zones.
+#   The Developer zone is used by developers and testers on new features.  The
+#   Staging zone is used by testers to look for problems before moving to production.
+#   The Production zone will be used by end-users.
+#
+# Database sets is just a way to combine more than one working set of databases
+#   to be synced inside a zone.  For instance, in a Production zone there could
+#   be end-user databases and internal tool databases.  These should be tracked
+#   and synced separately, but they are still both in the Production zone.
+#
+
+personal:
+  products:
+    name: Personal
+    host: "%(requesting_workstation)s"
+    database: "%(name)s"
+    user: dbsync
+    password: ThisOneIsForMyHomies
+    table_whitelist: ["localization"]
+    table_blacklist: ["*_event", "comment", "user*"]
+
+qa:
+  products:
+    name: QA
+    host: "qa.your.domain.com"
+    database: "%(name)s"
+    user: dbsync
+    password: ThisIsGoingAwayOldQa
+    table_whitelist: ["localization"]
+    table_blacklist: ["*_event", "comment", "user*"]
+    export_schema_only: true
+
+dev:
+  products:
+    name: Development
+    host: "%(name)sdb.au.qa.your.domain.com"
+    database: "%(name)s"
+    user: dbsync
+    password: d3v0nlyFroMh3Re
+    table_whitelist: ["localization"]
+    table_blacklist: ["*_event", "comment", "user*"]
+    # Development can only export schema and whitelisted tables
+    export_schema_and_whitelist_only: true
+
+content:
+  products:
+    name: Content
+    host: "%(name)sdb.producer.qa.your.domain.com"
+    database: "%(name)s"
+    user: dbsync
+    password: SECRET
+    table_whitelist: ["localization"]
+    table_blacklist: ["*_event", "comment", "user*"]
+
+staging:
+  products:
+    name: Staging
+    host: "%(name)sdb.dev.qa.your.domain.com"
+    database: "%(name)s"
+    user: dbsync
+    password: SECRET
+    table_whitelist: ["alwaysdothisdb"]
+    table_blacklist: ["*_event", "comment", "user*"]
+
+prod:
+  products:
+    name: Production
+    host: "%(name)sdb.prod.your.domain.com"
+    database: "%(name)s"
+    user: dbsync
+    password: SECRET
+    table_whitelist: ["alwaysdothisdb"]
+    table_blacklist: ["*_event", "comment", "user*"]
+    # Production will only accept full Schema/Data pushs from Staging.  No partials and not from anywhere else.
+    only_accept_full_update_from: staging
+
+external-qa:
+  products:
+    name: External QA
+    host: "dbsync.your.domain.com"
+    database: "%(name)s"
+    user: dbsync
+    password: "SECRET"
+    port: 5506
+    table_whitelist: ["alwaysdothisdb"]
+    table_blacklist: ["*_event", "comment", "user*"]
+    #NOTE(g): Needs this run from dbsync.your.domain.com
+    connection_wrapper_thread_command: "ssh external-qa.your.domain.com -L dbsync.your.domain.com:5506:external-qa.your.domain.com:3306"
+

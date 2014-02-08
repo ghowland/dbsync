@@ -1,0 +1,6 @@
+# Database Set information
+products:
+  name: Products
+
+  # Get the data to populate our database sets here
+  data: conf/data_products.yaml

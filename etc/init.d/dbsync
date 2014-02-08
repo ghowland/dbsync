@@ -1,0 +1,73 @@
+#!/bin/bash
+#
+# dbsync        Starts dbsync XMLRPC Server
+#
+#
+# chkconfig: 2345 86 14
+# description: dbsync XMLRPC Server
+### BEGIN INIT INFO
+# Provides: $dbsync
+### END INIT INFO
+
+# Source function library.
+. /etc/init.d/functions
+
+RETVAL=0
+
+SERVER_DIR=/data/dbsync/server
+
+PYTHONPATH=$SERVER_DIR
+export PYTHONPATH
+
+start() {
+	cd $SERVER_DIR
+	nohup $SERVER_DIR/dbsync_server.py > /dev/null &
+
+	status
+}
+
+stop() {
+	status
+	/usr/bin/pkill -f "$SERVER_DIR/dbsync.py"
+	status
+	return 0
+}
+
+restart() {
+	stop
+	sleep 1
+    start
+}
+
+status() {
+	COUNT=`/bin/ps -ef | grep "$SERVER_DIR/dbsync.py" | grep -v grep | wc -l`
+
+	if [ $COUNT -ne 0 ] ; then
+		echo "dbsync is running"
+		return 0
+	else
+		echo "dbsync is stopped"
+		return 1
+	fi
+}
+
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
+	;;
+  status)
+  	status
+	;;
+  restart)
+  	restart
+	;;
+  *)
+	echo $"Usage: $0 {start|stop|status|restart}"
+	exit 2
+esac
+
+exit $?
+

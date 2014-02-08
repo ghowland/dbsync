@@ -1,0 +1,6 @@
+# This is the database information for the dbsync Change and Approval system
+host: dbsync.your.domain.com
+user: dbsync
+password: SECRETPASSHERE
+database: dbsync
+port: 3306

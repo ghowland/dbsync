@@ -1,0 +1,16 @@
+qa:
+  - group: qa
+
+producers:
+  - group: producers
+
+producers_lead:
+  - user: jefferson
+  - user: lincoln
+
+techops:
+  - group: ops
+
+techops_lead:
+  - user: ghowland
+

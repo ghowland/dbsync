@@ -1,0 +1,91 @@
+# Zones and their Database Sets
+# 
+# A Zone is a like an "area of work", in that a different set of work is done in that
+#   zone, and likely it is access by different people, for different purposes.
+#   Consider the difference between a Developer, Staging and Production zones.
+#   The Developer zone is used by developers and testers on new features.  The
+#   Staging zone is used by testers to look for problems before moving to production.
+#   The Production zone will be used by end-users.
+#
+# Database sets is just a way to combine more than one working set of databases
+#   to be synced inside a zone.  For instance, in a Production zone there could
+#   be end-user databases and internal tool databases.  These should be tracked
+#   and synced separately, but they are still both in the Production zone.
+#
+
+# local:
+#   games:
+#     name: Local Test
+#     host: "127.0.0.1"
+#     database: "%(name)s"
+#     user: dbsync
+#     password: "y3ahsuper"
+#     table_whitelist: ["alwaysdothisdb"]
+#     table_blacklist: ["*_event", "comment", "user*"]
+
+# remote:
+#   games:
+#     name: Remote Test
+#     host: "172.99.67.152"
+#     database: "%(name)s"
+#     user: dbsync
+#     password: "supery3ah"
+#     table_whitelist: ["alwaysdothisdb"]
+#     table_blacklist: ["*_event", "comment", "user*"]
+
+# old:
+#   games:
+#     name: Development
+#     host: "qa-1"
+#     database: "%(name)s"
+#     user: dbsync
+#     password: d3v0nlyFroMh3Re
+#     table_whitelist: ["alwaysdothisdb"]
+#     table_blacklist: ["*_event", "comment", "user*"]
+#     # Development can only export schema and whitelisted tables
+#     export_schema_and_whitelist_only: true
+
+dev:
+  games:
+    name: Development
+    host: "qa-4.corp.your.domain.com"
+    database: "%(name)s"
+    user: dbsync
+    password: SECRET
+    table_whitelist: ["alwaysdothisdb"]
+    table_blacklist: ["*_event", "comment", "user*", "blocklist"]
+    export_schema_and_whitelist_only: true
+    commit_approvals_required: ["producers"]
+    commit_approvals_override: ["producers_lead", "techops"]
+    schema_commit_approvals_required: ["techops"]
+    schema_commit_approvals_override: []
+
+content:
+  games:
+    name: Content
+    host: "qa-5.corp.your.domain.com"
+    database: "%(name)s"
+    user: dbsync
+    password: SECRET
+    table_whitelist: ["alwaysdothisdb"]
+    table_blacklist: ["*_event", "comment", "user*", "blocklist"]
+    commit_approvals_required: ["producers"]
+    commit_approvals_override: ["producers_lead", "techops"]
+    schema_commit_approvals_required: ["techops"]
+    schema_commit_approvals_override: []
+
+staging:
+  games:
+    name: Staging
+    host: "qa-6.corp.your.domain.com"
+    database: "%(name)s"
+    user: dbsync
+    password: SECRET
+    table_whitelist: ["alwaysdothisdb"]
+    table_blacklist: ["*_event", "comment", "user*", "blocklist"]
+    commit_approvals_required: ["producers"]
+    commit_approvals_override: ["producers_lead", "techops"]
+    schema_commit_approvals_required: ["techops"]
+    schema_commit_approvals_override: []
+
+

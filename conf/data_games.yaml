@@ -1,0 +1,11 @@
+# Out list of names, with their field data to populate into the zone group data (DB/host)
+# test:
+#   name: test
+assets:
+  name: assets
+inventory:
+  name: inventory
+project:
+  name: project
+user:
+  name: user
